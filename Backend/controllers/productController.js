@@ -1,10 +1,7 @@
 const model = require("../models/index");
-const sequelize = model.sequelize;
 const helpers = require("../helpers");
 const prod = model.products,
-      category = model.categories,
-      boxTypes= model.boxTypes,
-      handleError = helpers.handleError;
+    category = model.categories;
 
 module.exports = {
 
@@ -22,10 +19,6 @@ list: async function(req, res) {
                 attributes: ['id', 'name','image'],
                 model: category
                 },
-                {
-                attributes: ['id', 'name','image','shipping'],
-                model: boxTypes
-                },
             ]
         });
         if (products) {
@@ -41,7 +34,7 @@ list: async function(req, res) {
 /////////////// get products based on category and their detail   ///////////////
 //////////////////////////////////////////////////////////////////////////////// 
     
-getById: async function(req, res) {
+getByCategoryId: async function(req, res) {
     try {
         const products = await prod.findAll({
             attributes: ['name', 'description', 'image', 'price', 'quantity'],
@@ -52,11 +45,7 @@ getById: async function(req, res) {
                 {
                 attributes: ['id', 'name','image'],
                 model: category
-                },
-                {
-                attributes: ['id', 'name','image','shipping'],
-                model: boxTypes
-                },
+                }
             ]
         });
         if (products) {
@@ -64,7 +53,6 @@ getById: async function(req, res) {
         }
 
     } catch (e) {
-        console.log(e);
         return helpers.jsonResponse(res, false, {}, e.message, e.code, 400);
     }
     },

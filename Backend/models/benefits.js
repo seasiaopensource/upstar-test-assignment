@@ -34,5 +34,8 @@ module.exports = (sequelize, type) => {
 			timestamps: false
 		}
 	);
+	model.associate = models => {
+		model.hasMany(models.boxBenefits);
+	  };
 	return model;
 };

@@ -1,21 +1,8 @@
 const router = require("express").Router();
-const config = require('config');
-const cookieParser = require('cookie-parser');
-
 const boxCtrl = require("./controllers/boxController");
 const prodCtrl = require("./controllers/productController");
+const catCtrl = require("./controllers/categoryController");
 
-
-// middleware to check authentication
-
-const withAuthUserId = [
-	cookieParser(),
-	(req, res, next) => {
-	  const claims = jsonwebtoken.verify(req.cookies['jwt'], config.jwtToken)
-	  req['authUserId'] = claims['id']
-	  next()
-	}
-  ]
 
 // Define All Routes Below
 
@@ -26,8 +13,10 @@ const withAuthUserId = [
 
 // GET Routes
 router.get("/v1/boxList", boxCtrl.list);
+router.get("/v1/boxBenefits", boxCtrl.boxBenefit);
+router.get("/v1/categoryList", catCtrl.list);
 router.get("/v1/productList", prodCtrl.list);
-router.get("/v1/productList/categoryId", prodCtrl.getById);
+router.get("/v1/productList/:categoryId", prodCtrl.getByCategoryId);
 
 
 // Api V1 Routes Ends -------------------

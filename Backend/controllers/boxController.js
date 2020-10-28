@@ -1,10 +1,8 @@
 const model = require("../models/index");
-const sequelize = model.sequelize;
 const helpers = require("../helpers");
 const boxTypes = model.boxTypes;
 const benefit = model.benefits;
 const boxBenefit = model.boxBenefits;
-const handleError = helpers.handleError;
 
 module.exports = {
 
@@ -17,7 +15,7 @@ module.exports = {
 
 
             const type = await boxTypes.findAll({
-                attributes: ['id', 'name', 'image','shipping'],
+                attributes: ['id', 'name', 'image', 'shipping'],
                 where: {
                     status: 1                     /// only active
                 },
@@ -26,7 +24,7 @@ module.exports = {
                         attributes: ['benefitId'],
                         model: boxBenefit,
                         include: [{
-                            attributes: ['name', 'price','id'],
+                            attributes: ['name', 'price', 'id'],
                             model: benefit,
                         }]
                     },
@@ -34,16 +32,31 @@ module.exports = {
                 ]
 
             });
+            if (type) {
+                return helpers.jsonResponse(res, true, type, "Box List", 200, 200);
+            }
+        } catch (e) {
+            return helpers.jsonResponse(res, false, {}, e.message, e.code, 400);
+        }
+    },
 
-            return helpers.jsonResponse(
-                res,
-                true,
-                type,
-                "Box List",
-                200,
-                200
-            );
 
+    ///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////// box benefits with boxId ////////////////////////
+    //////////////////////////////////////////////////////////////////////////////
+
+    boxBenefit: async function (req, res) {
+        try {
+            const type = await benefit.findAll({
+                attributes: ['name', 'price', 'id'],
+                include: [{
+                    attributes: ['boxId'],
+                    model: boxBenefit,
+                }]
+            });
+            if (type) {
+                return helpers.jsonResponse(res, true, type, "Box Benefits", 200, 200);
+            }
 
         } catch (e) {
             return helpers.jsonResponse(res, false, {}, e.message, e.code, 400);

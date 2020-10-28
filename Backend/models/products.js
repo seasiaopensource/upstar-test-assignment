@@ -13,16 +13,6 @@ module.exports = (sequelize, type) => {
                 type: type.STRING(60),
                 allowNull: false
 			},
-			boxTypeId: {
-				type: type.UUID,
-				allowNull: false,
-				references: {
-				  model: 'boxTypes',
-				  key: 'id'
-				 },
-				 onUpdate: 'CASCADE',
-				 onDelete: 'CASCADE',
-			},
             categoryId: {
 				type: type.UUID,
 				allowNull: false,
@@ -32,6 +22,14 @@ module.exports = (sequelize, type) => {
 				 },
 				 onUpdate: 'CASCADE',
 				 onDelete: 'CASCADE',
+			},
+			description: {
+				type: type.STRING(255),
+                allowNull: false
+			},
+			price: {
+				type: type.FLOAT,
+                allowNull: false
 			},
 			image: {
 				type: type.STRING(80),
@@ -65,7 +63,6 @@ module.exports = (sequelize, type) => {
 	);
 	model.associate = models => {
 		model.belongsTo(models.categories);
-		model.belongsTo(models.boxTypes);
 	  };
 	return model;
 };
