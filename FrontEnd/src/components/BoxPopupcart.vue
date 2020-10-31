@@ -12,10 +12,22 @@
     >
    
       <span class="item-price"> 
-      <input type="checkbox" id="checkbox" v-model="checked"><label for="checkbox">
-        {{ checked }}</label> {{ box.benefit.name }} - $ {{ box.benefit.price }}</span>
+      <input type="checkbox" 
+      @change="check($event)" 
+      :value="box.benefit.name" 
+       id="box.benefit.id"
+       v-model="benefits"><label for="checkbox">
+        </label> {{ box.benefit.name }} - $ {{ box.benefit.price }}</span>
       
      
+    </div>
+    <div class="cart-info" v-if="hasBox()">
+    <label>Repeat:</label>
+    <select @change="resubscribe($event)"  v-model="resubscrption">
+      <option value="For Every 1 Month">For Every 1 Month</option>
+      <option value="For Every 2 Month">For Every 2 Month</option>
+      <option value="For Every 3 Month">For Every 3Month</option>
+    </select>
     </div>
     <div class="cart-info" v-if="hasBox()">
       <span>Total: $ {{ totalPrice() }}, 00</span>
@@ -36,6 +48,14 @@ export default {
     hasBox() {
       return this.getCurrentBoxPopupCart && this.getCurrentBoxPopupCart.boxBenefits!== undefined && this.getCurrentBoxPopupCart.boxBenefits.length > 0;
     },
+    check: function(e) {
+      console.log(this.benefits,e);
+      alert('Benefits upgraded!');
+    },
+    resubscribe:function(e) {
+      this.resubscription= e.target.value
+      alert(e.target.value+' subscription period upgraded!');
+    },
     totalPrice() {
       console.log(this.getCurrentBoxPopupCart)
       return this.getCurrentBoxPopupCart.boxBenefits.reduce(
@@ -48,6 +68,12 @@ export default {
   computed: {
     ...mapGetters(['getCurrentBoxPopupCart']),
   },
+  data() {
+    return {
+      benefits:[],
+      resubscrption:'For Every 1 Month'
+    }
+  }
 };
 </script>
 
